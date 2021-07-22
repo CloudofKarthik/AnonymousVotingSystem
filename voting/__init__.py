@@ -15,20 +15,22 @@ def create_app():
     conn = db.get_db()
     cursor = conn.cursor()
     if request.method == "GET":
-      return render_template('login.html')
+      return render_template('index.html')
     elif request.method == "POST":
       
       name = request.form.get("login")
       password = request.form.get("password")
  
-      query1 = "Select name, password from users where name = '{un}' and password = '{pw}'".format(un = name,pw = password)
+      query1 = "Select id, name, password from users where name = '{un}' and password = '{pw}'".format(un = name,pw = password)
       
       cursor.execute(query1)
-      rows = cursor.fetchall()
-      if len(rows)==1:
-        return redirect("/polls")
+      rows = cursor.fetchone()
+      if not rows:
+        return render_template('index.html')
       else:
-        return render_template('login.html')
+        ID, name, pwd = rows
+        return redirect(url_for("polls", ID=ID), 302)
+        
   
   @app.route("/register", methods=['GET','POST'])
   def SignUp():
@@ -46,9 +48,9 @@ def create_app():
       conn.commit()
       return redirect('/')
       
+  @app.route("/polls/<ID>")
+  def polls(ID):
+    return render_template('polls.html',ID = ID)
       
-  @app.route("/polls")
-  def polls():
-    return render_template('polls.html')
     
   return app

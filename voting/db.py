@@ -26,6 +26,7 @@ def init_db():
   f = current_app.open_resource("sql/000_create.sql")
   sql_code = f.read().decode("ascii")
   cur= db.cursor()
+  cur.execute(sql_code)
   cur.close()
   db.commit()
   

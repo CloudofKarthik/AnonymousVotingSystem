@@ -10,7 +10,10 @@ def create_app():
   
   @app.route("/")
   def login():
-    
     return render_template('login.html')
   
   return app
+  
+  @app.route("/SignUp")
+  def SignUp():
+    return render_template('signup.html')

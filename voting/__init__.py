@@ -8,12 +8,12 @@ def create_app():
   from . import db 
   db.init_app(app)
   
-  @app.route("/")
+  @app.route("/", methods=['GET','POST'])
   def login():
     return render_template('login.html')
   
-  return app
-  
-  @app.route("/SignUp")
+  @app.route("/register", methods=['GET','POST'])
   def SignUp():
-    return render_template('signup.html')
+    return render_template('reg.html')
+    
+  return app

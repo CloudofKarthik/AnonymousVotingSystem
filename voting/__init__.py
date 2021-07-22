@@ -12,24 +12,43 @@ def create_app():
   
   @app.route("/", methods=['GET','POST'])
   def login():
-    return render_template('login.html')
+    conn = db.get_db()
+    cursor = conn.cursor()
+    if request.method == "GET":
+      return render_template('login.html')
+    elif request.method == "POST":
+      
+      name = request.form.get("login")
+      password = request.form.get("password")
+ 
+      query1 = "Select name, password from users where name = '{un}' and password = '{pw}'".format(un = name,pw = password)
+      
+      cursor.execute(query1)
+      rows = cursor.fetchall()
+      if len(rows)==1:
+        return redirect("/polls")
+      else:
+        return render_template('login.html')
   
   @app.route("/register", methods=['GET','POST'])
   def SignUp():
     conn = db.get_db()
     cursor = conn.cursor()
     if request.method == "GET":  
-      print("qwerty")
       return render_template('reg.html')
     elif request.method == "POST":
       username = request.form.get("Username")
       email = request.form.get("email")
       password = request.form.get("password")
-      print("asdfg")
       cursor.execute("""INSERT INTO
         users (name, email, password) 
         VALUES (%s, %s, %s)""",(username, email, password))
       conn.commit()
       return redirect('/')
+      
+      
+  @app.route("/polls")
+  def polls():
+    return render_template('polls.html')
     
   return app

@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask import Blueprint
 from flask import request, redirect, url_for
+import datetime
 
 def create_app():
   app = Flask("voting")
@@ -70,18 +71,33 @@ def create_app():
     elif request.method == "POST":
       poll_name = request.form.get("poll_name")
       no_of_polls = request.form.get("no_of_options")
+      deadline = request.form.get("deadline")
       cursor.execute("""INSERT INTO
-        polls (owner, poll_name, no_of_options) 
-        VALUES (%s, %s, %s)""",(ID, poll_name, no_of_polls))
+        polls (owner, poll_name, no_of_options, deadline) 
+        VALUES ({ID}, '{pn}', {nop}, '{deadline}')""".format(ID=ID, pn=poll_name, nop=no_of_polls, deadline=deadline))
       conn.commit()
       query1 = "Select max(id) from polls where owner = '{ID}'".format(ID = ID)
       cursor.execute(query1)
       rows = cursor.fetchone()
       options = request.form.get("options")
-      deadline = request.form.get("deadline")
+      option_list = list(options.split("\n"))
+      l = len(option_list)
+      
       table_name=str(poll_name+str(rows[0]))
+      pid = rows[0]
       cursor.execute("""CREATE TABLE {table_name}(pid int, constraint fk_options foreign key(pid) REFERENCES polls(id))""".format(table_name = table_name))
       conn.commit()
+      query3 = "insert into {table_name}(pid) values({pid})".format(table_name=table_name, pid = pid)
+      cursor.execute(query3)
+      conn.commit()
+      for i in range(l):
+        query2 = """Alter table {table_name} add column {column} integer""".format(table_name=table_name, column=option_list[i])
+        print(query2)
+        cursor.execute(query2)
+        conn.commit()
+        query4 = "update {table_name} set {option}=0".format(table_name=table_name, option=option_list[i])
+        cursor.execute(query4)
+        conn.commit()
       return redirect(url_for("polls", ID=ID), 302)
       
     

@@ -74,6 +74,14 @@ def create_app():
         polls (owner, poll_name, no_of_options) 
         VALUES (%s, %s, %s)""",(ID, poll_name, no_of_polls))
       conn.commit()
+      query1 = "Select max(id) from polls where owner = '{ID}'".format(ID = ID)
+      cursor.execute(query1)
+      rows = cursor.fetchone()
+      options = request.form.get("options")
+      deadline = request.form.get("deadline")
+      table_name=str(poll_name+str(rows[0]))
+      cursor.execute("""CREATE TABLE {table_name}(pid int, constraint fk_options foreign key(pid) REFERENCES polls(id))""".format(table_name = table_name))
+      conn.commit()
       return redirect(url_for("polls", ID=ID), 302)
       
     

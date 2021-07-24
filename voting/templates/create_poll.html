@@ -1,12 +1,12 @@
 <div class="create_polls">
 <h1>CREATE POLL</h1>
   <form method="post" action="">
-    <p><input type="text" name="poll_name" value="" placeholder="Poll_Name"></p>
-    <p><input type="number" name="no_of_options" value="" placeholder="No_Of_Options" min="2" max="10"></p>
+    <p><input type="text" name="poll_name" value="" placeholder="Poll_Name" required></p>
+    <p><input type="number" name="no_of_options" value="" placeholder="No_Of_Options" min="2" max="10" required></p>
     <p>Enter the options for the poll in separate lines</p>
-    <p><textarea name="options"></textarea></p>
-    <p>Select the dedadline for the poll</p>
-    <p><input type="date" name="deadline"></p>
+    <p><textarea name="options" required></textarea></p>
+    <p>Select the deadline for the poll</p>
+    <p><input type="date" name="deadline" required></p>
     <p class="submit"><input type="submit" name="commit" value="Submit"></p>
   </form>
 </div>

@@ -60,7 +60,12 @@ def create_app():
       return render_template('polls.html',ID = ID)
       
     if request.method == "POST":
-      return redirect(url_for("create_polls", ID=ID), 302)
+      value1 = request.form.get("commit_create")
+      value2 = request.form.get("commit_view")
+      if value1=="CREATE POLL":
+        return redirect(url_for("create_polls", ID=ID), 302)
+      elif value2=="VIEW POLLS":
+        return redirect(url_for("view_polls", ID=ID), 302)
       
   @app.route("/polls/<ID>/create_poll", methods=['GET','POST'])
   def create_polls(ID):
@@ -80,6 +85,7 @@ def create_app():
       cursor.execute(query1)
       rows = cursor.fetchone()
       options = request.form.get("options")
+      options = options.strip()
       option_list = list(options.split("\n"))
       l = len(option_list)
       for j in range(l):
@@ -101,6 +107,18 @@ def create_app():
         cursor.execute(query4)
         conn.commit()
       return redirect(url_for("polls", ID=ID), 302)
+      
+  @app.route("/polls/<ID>/view_polls", methods=['GET','POST'])
+  def view_polls(ID):
+    conn = db.get_db()
+    cursor = conn.cursor()
+    cursor.execute("select id, poll_name, deadline from polls where owner = %s", (ID,))
+    polls = cursor.fetchall()
+    if not polls:
+      return redirect(url_for("polls", ID=ID), 302)
+    job = cursor.fetchone()
+    if request.method == "GET":
+      return render_template('view_polls.html',ID = ID, polls = polls)
       
     
       

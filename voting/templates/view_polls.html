@@ -1,0 +1,11 @@
+<div class="create_polls">
+View Polls
+</div>
+{% for id, poll_name, deadline in polls%}
+<p>
+      <tr>
+        <td> {{poll_name}} </td>
+        <td> | Deadline : {{deadline}} </td>
+      </tr>
+</p>
+      {% endfor %}

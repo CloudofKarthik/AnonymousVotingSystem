@@ -112,13 +112,37 @@ def create_app():
   def view_polls(ID):
     conn = db.get_db()
     cursor = conn.cursor()
-    cursor.execute("select id, poll_name, deadline from polls where owner = %s", (ID,))
+    cursor.execute("select id, owner, poll_name, deadline from polls where owner = %s", (ID,))
     polls = cursor.fetchall()
     if not polls:
       return redirect(url_for("polls", ID=ID), 302)
     job = cursor.fetchone()
     if request.method == "GET":
       return render_template('view_polls.html',ID = ID, polls = polls)
+      
+  @app.route("/polls/<ID>/<pid>", methods=['GET','POST'])
+  def poll_details(ID,pid):
+    conn = db.get_db()
+    cursor = conn.cursor()
+    if request.method == "GET":
+      cursor.execute("select poll_name from polls where id = %s", (pid,))
+      row = cursor.fetchone()
+      pollname=row[0]
+      pollname1 = pollname
+      pollname = pollname.replace(" ","_")
+      pollname = pollname+str(pid)      
+      cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname,))
+      rows = cursor.fetchall()
+      row_list = []
+      for r in rows:
+        row_list.append(r[0])
+      row_list = row_list[1:len(row_list)]
+      cursor.execute("select * from {table_name}".format(table_name=pollname))
+      row1 = cursor.fetchone()
+      row1 = list(row1[1:len(row1)])
+      dict1 = dict(zip(row_list, row1))
+        
+      return render_template('poll_details.html', ID=ID, pid=pid, rows=row_list, pollname=pollname1, row = row1, dictionary = dict1) 
       
     
       

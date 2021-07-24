@@ -1,0 +1,29 @@
+<div class="poll details">
+</div>
+<p>
+{{pollname}}
+
+</p>
+<p>
+List of Options
+</p>
+<p>
+---------------
+
+</p>
+{% for column_name1,column_name2 in dictionary.items()%}
+<p>
+      <tr>
+        <td> {{column_name1}}  :  {{column_name2}}</td>
+      </tr>
+</p>
+      {% endfor %}
+      
+      
+<p>
+Add another Option to the poll
+
+------------------------------
+</p>
+
+

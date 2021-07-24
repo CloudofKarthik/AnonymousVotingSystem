@@ -1,10 +1,10 @@
 <div class="create_polls">
 View Polls
 </div>
-{% for id, poll_name, deadline in polls%}
+{% for id, owner, poll_name, deadline in polls%}
 <p>
       <tr>
-        <td> {{poll_name}} </td>
+        <td> <a href="{{url_for('poll_details', ID=owner,pid=id)}}">{{poll_name}}</a> </td>
         <td> | Deadline : {{deadline}} </td>
       </tr>
 </p>

@@ -82,8 +82,11 @@ def create_app():
       options = request.form.get("options")
       option_list = list(options.split("\n"))
       l = len(option_list)
+      for j in range(l):
+        option_list[j] = option_list[j].replace(" ","_")
       
       table_name=str(poll_name+str(rows[0]))
+      table_name = table_name.replace(" ","_")
       pid = rows[0]
       cursor.execute("""CREATE TABLE {table_name}(pid int, constraint fk_options foreign key(pid) REFERENCES polls(id))""".format(table_name = table_name))
       conn.commit()
@@ -92,7 +95,6 @@ def create_app():
       conn.commit()
       for i in range(l):
         query2 = """Alter table {table_name} add column {column} integer""".format(table_name=table_name, column=option_list[i])
-        print(query2)
         cursor.execute(query2)
         conn.commit()
         query4 = "update {table_name} set {option}=0".format(table_name=table_name, option=option_list[i])

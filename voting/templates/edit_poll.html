@@ -12,14 +12,22 @@ List of Options
 ---------------
 
 </p>
+<form method="post">
 {% for column_name1 in row1%}
-<p>
       <tr>
-        <td> {{column_name1}} </td>
+        <td> {{column_name1}} </td> 
+        <input type="radio" id="{{column_name1}}" name="Options" value="{{column_name1}}">
+<br>
       </tr>
-</p>
       {% endfor %}
       
+      <p class="submit"><input type="submit" onclick="Function1()" name="commit" value="Vote"></p>
+      <script>
+      function Function1() {
+  alert("Your vote has successfully been registered");
+}
+      </script>
+</form> 
       
 
 

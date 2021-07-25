@@ -141,6 +141,9 @@ def create_app():
       for r in rows:
         row_list.append(r[0])
       row_list = row_list[1:len(row_list)]
+      l = len(row_list)
+      for i in range(l):
+        row_list[i] = row_list[i][2:len(row_list[i])]
       cursor.execute("select * from {table_name}".format(table_name=pollname))
       row1 = cursor.fetchone()
       row1 = list(row1[1:len(row1)])
@@ -167,9 +170,28 @@ def create_app():
       for r in rows:
         row_list.append(r[0])
       row_list = row_list[1:len(row_list)]
+      l = len(row_list)
+      for i in range(l):
+        row_list[i] = row_list[i][2:len(row_list[i])]
       cursor.execute("select * from {table_name}".format(table_name=pollname))
       row1 = cursor.fetchone()
       row1 = list(row1[1:len(row1)])
       return render_template('edit_poll.html', row1=row_list, pollname=pollname1, pid=pid)
+      
+    elif request.method == "POST":
+      print("Hi")
+      option = request.form.get("Options")
+      option = "c_"+option
+      query1 = "select poll_name from polls where id={pid}".format(pid=pid)
+      cursor.execute(query1)
+      row = cursor.fetchone()
+      table_name = row[0]
+      table_name = table_name.replace(" ","_")
+      table_name = "table_"+table_name+str(pid)
+      query2 = "update {table_name} set {option}={option}+1".format(table_name=table_name, option=option)
+      print(query2)
+      cursor.execute(query2)
+      conn.commit()
+      return redirect('/')
     
   return app

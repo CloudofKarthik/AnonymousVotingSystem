@@ -1,0 +1,20 @@
+<div class="edit poll">
+</div>
+<p>
+{{pollname}}
+
+</p>
+<p>
+List of Options
+</p>
+<p>
+---------------
+
+</p>
+{% for column_name1 in row1%}
+<p>
+      <tr>
+        <td> {{column_name1}} </td>
+      </tr>
+</p>
+      {% endfor %}

@@ -74,7 +74,7 @@ def create_app():
     if request.method == "GET":
       return render_template('create_poll.html',ID = ID)
     elif request.method == "POST":
-      poll_name = request.form.get("poll_name")
+      poll_name = request.form.get("poll_name").strip()
       no_of_polls = request.form.get("no_of_options")
       deadline = request.form.get("deadline")
       cursor.execute("""INSERT INTO
@@ -90,9 +90,12 @@ def create_app():
       l = len(option_list)
       for j in range(l):
         option_list[j] = option_list[j].replace(" ","_")
+        option_list[j] = "c_"+option_list[j]
       
       table_name=str(poll_name+str(rows[0]))
       table_name = table_name.replace(" ","_")
+      table_name = table_name.strip()
+      table_name = "table_"+table_name
       pid = rows[0]
       cursor.execute("""CREATE TABLE {table_name}(pid int, constraint fk_options foreign key(pid) REFERENCES polls(id))""".format(table_name = table_name))
       conn.commit()
@@ -130,10 +133,12 @@ def create_app():
       pollname=row[0]
       pollname1 = pollname
       pollname = pollname.replace(" ","_")
-      pollname = pollname+str(pid)      
+      pollname = pollname+str(pid)
+      pollname = "table_"+pollname      
       cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname,))
       rows = cursor.fetchall()
       row_list = []
+      j=0
       for r in rows:
         row_list.append(r[0])
       row_list = row_list[1:len(row_list)]
@@ -145,6 +150,28 @@ def create_app():
       return render_template('poll_details.html', ID=ID, pid=pid, rows=row_list, pollname=pollname1, row = row1, dictionary = dict1) 
       
     
-      
+  @app.route("/polls/edit_poll/<pid>", methods=['GET','POST'])
+  def edit_poll(pid):
+    conn = db.get_db()
+    cursor = conn.cursor()
+    if request.method == "GET":
+      cursor.execute("select poll_name from polls where id = %s", (pid,))
+      row = cursor.fetchone()
+      pollname=row[0]
+      pollname1 = pollname
+      pollname = pollname.replace(" ","_")
+      pollname = pollname+str(pid)
+      pollname = "table_"+pollname      
+      cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname,))
+      rows = cursor.fetchall()
+      row_list = []
+      j=0
+      for r in rows:
+        row_list.append(r[0])
+      row_list = row_list[1:len(row_list)]
+      cursor.execute("select * from {table_name}".format(table_name=pollname))
+      row1 = cursor.fetchone()
+      row1 = list(row1[1:len(row1)])
+      return render_template('edit_poll.html', row1=row_list, pollname=pollname1)
     
   return app

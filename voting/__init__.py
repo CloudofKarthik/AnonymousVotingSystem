@@ -138,7 +138,6 @@ def create_app():
       cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname,))
       rows = cursor.fetchall()
       row_list = []
-      j=0
       for r in rows:
         row_list.append(r[0])
       row_list = row_list[1:len(row_list)]
@@ -165,13 +164,12 @@ def create_app():
       cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname,))
       rows = cursor.fetchall()
       row_list = []
-      j=0
       for r in rows:
         row_list.append(r[0])
       row_list = row_list[1:len(row_list)]
       cursor.execute("select * from {table_name}".format(table_name=pollname))
       row1 = cursor.fetchone()
       row1 = list(row1[1:len(row1)])
-      return render_template('edit_poll.html', row1=row_list, pollname=pollname1)
+      return render_template('edit_poll.html', row1=row_list, pollname=pollname1, pid=pid)
     
   return app

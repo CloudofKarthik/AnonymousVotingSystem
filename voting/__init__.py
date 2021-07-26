@@ -1,11 +1,12 @@
 from flask import Flask, render_template
-from flask import Blueprint
+from flask import Blueprint, session
 from flask import request, redirect, url_for
 import datetime
 from datetime import date
 
 def create_app():
   app = Flask("voting")
+  app.secret_key = "super secret key"
   
   app.config.from_mapping(DATABASE="AVS")
   
@@ -23,14 +24,16 @@ def create_app():
       name = request.form.get("login")
       password = request.form.get("password")
  
-      query1 = "Select id, name, password from users where name = '{un}' and password = '{pw}'".format(un = name,pw = password)
+      query1 = "Select id, name,email, password from users where name = '{un}' and password = '{pw}'".format(un = name,pw = password)
       
       cursor.execute(query1)
       rows = cursor.fetchone()
       if not rows:
         return render_template('index.html')
       else:
-        ID, name, pwd = rows
+        session['name'] = rows[1]
+        session['email'] = rows[2]
+        ID, name, email, pwd = rows
         return redirect(url_for("polls", ID=ID), 302)
         
   
@@ -63,10 +66,14 @@ def create_app():
     if request.method == "POST":
       value1 = request.form.get("commit_create")
       value2 = request.form.get("commit_view")
+      value3 = request.form.get("commit_logout")
       if value1=="CREATE POLL":
         return redirect(url_for("create_polls", ID=ID), 302)
       elif value2=="VIEW POLLS":
         return redirect(url_for("view_polls", ID=ID), 302)
+      elif value3=="LOGOUT":
+        session.clear()
+        return redirect(url_for("polls", ID=ID), 302)
       
   @app.route("/polls/<ID>/create_poll", methods=['GET','POST'])
   def create_polls(ID):

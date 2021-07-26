@@ -5,7 +5,28 @@
 <div class="poll details">
 </div>
 
+<script>
+window.onunload = function(){};
+</script>
 
+
+{% if session['name'] %}
+<div></div>
+{% else %}
+<script>
+
+alert("You are logged out");
+let url = window.location.href;
+let b = url.split("/")
+let c = b.length
+let d = ""
+for(i=0;i<c-3;i++){
+d=d+b[i] + "/"
+}
+window.location.replace(d);
+
+</script>
+{% endif %}
 
 <p>
 {{pollname}}
@@ -66,11 +87,8 @@ Get link for the poll
 </p>
 <p>
 --------------------
+
 </p>
-
- 
-   
-
 
 <p><input type="text" id="txt" readonly></p>
 <script>
@@ -95,7 +113,7 @@ function myFunction() {
 
   document.execCommand("copy");
 
-  alert("Copied the text: " + copyText.value);
+  alert("Copied the link: " + copyText.value);
 }
 </script>
 

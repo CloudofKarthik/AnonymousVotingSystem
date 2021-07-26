@@ -1,6 +1,30 @@
 <html>
 <head>
 
+<script>
+
+window.onunload = function(){};
+</script>
+
+{% if session['name'] %}
+<div></div>
+{% else %}
+<script>
+
+alert("You are logged out");
+let url = window.location.href;
+let b = url.split("/")
+let c = b.length
+let d = ""
+for(i=0;i<c-3;i++){
+d=d+b[i] + "/"
+}
+window.location.replace(d);
+
+</script>
+{% endif %}
+
+
 <div class="create_polls">
 <h1>CREATE POLL</h1>
   <form method="post" action="">

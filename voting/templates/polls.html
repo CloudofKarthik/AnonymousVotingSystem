@@ -1,9 +1,36 @@
 <div class="polls">
   <h1>Polls {{ID}}</h1>
+<label id="session">{{session['name']}}</label>
+<script>
+let ses = document.getElementById('session').textContent
+if (ses=="")
+{
+alert("You will be logged out");
+let url = window.location.href;
+let b = url.split("/")
+let c = b.length
+let d = ""
+for(i=0;i<c-2;i++){
+d=d+b[i] + "/"
+}
+window.location.replace(d);
+}
+</script>
+
   <form method="post" action="">
     <div>
     <p class="submit"><input type="submit" name="commit_create" value="CREATE POLL"></p>
     <p class="submit"><input type="submit" name="commit_view" value="VIEW POLLS"></p>
+    
+    <p class="submit"><input type="submit" name="commit_logout" value="LOGOUT"></p>
+    
     </div>
 </div>
+
+<div>
+
+--------------
+
+</div>
+
 

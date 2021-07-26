@@ -2,9 +2,9 @@
 <div class="register">
   <h1>Login to Web App</h1>
   <form method="post" action="/register">
-    <p><input type="text" name="Username" value="" placeholder="Username" required></p>
-    <p><input type="text" name="email" value="" placeholder="email" required></p>
-    <p><input type="password" name="password" value="" placeholder="Password" required></p>
+    <p><input type="text" name="Username" minlength="4" maxlength="10" value="" placeholder="Username" required></p>
+    <p><input type="text" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title="Please provide a valid e-mail address" value="" placeholder="email" required></p>
+    <p><input type="password" name="password" minlength="4" maxlength="10" value="" placeholder="Password" required></p>
    
     <p class="Signin"><a href="/">Already have an Account? SignIn</a></p>
     <p class="submit"><input type="submit" name="commit" value="Signup"></p>

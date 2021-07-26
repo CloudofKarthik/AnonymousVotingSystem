@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<script>
-document.getElementById("demo").innerHTML = 
-"The full URL of this page is:";
-</script>
+
 <div class="poll details">
 </div>
 
@@ -16,6 +13,37 @@ document.getElementById("demo").innerHTML =
 </p>
 <p>
 List of Options
+</p>
+<p>
+<label> Deadline : </label>
+<label id="deadline">{{deadline}}</label>
+<p>
+<p>
+<p>
+<label>Current lead : </label>
+</p>
+<label id="winners">{{winners}}</label>
+</p>
+</p>
+<label>Date :</label>
+<label id="curdate">{{curdate}}</label>
+<p>
+</p>
+The winner is : 
+<label id="winner"></label>
+<script>
+let de = document.getElementById('deadline').textContent;
+let cu = document.getElementById('curdate').textContent;
+let winner = document.getElementById('winners').textContent;
+if(de<cu)
+{
+document.getElementById("winner").innerText = winner;
+}
+else
+{
+document.getElementById("winner").innerText = "Not Decided";
+}
+</script>
 </p>
 <p>
 ---------------
@@ -55,8 +83,7 @@ d=d+b[i] + "/"
 }
 d = d + "edit_poll"
 d = d + "/" + "{{pid}}"
-document.getElementById("txt").value = 
-d;
+document.getElementById("txt").value = d;
 </script>
 
 <script>
@@ -72,7 +99,10 @@ function myFunction() {
 }
 </script>
 
+
+
 <button onclick="myFunction()">Copy text</button>
+
 
 
 

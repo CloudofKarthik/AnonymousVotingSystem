@@ -1,3 +1,6 @@
+<html>
+<body>
+
 <div class="edit poll">
 </div>
 
@@ -5,14 +8,37 @@
 {{pollname}}
 
 </p>
+
 <p>
-List of Options
-</p>
-<p>
----------------
+
+----------------
 
 </p>
 <form method="post">
+<label> Deadline : </label>
+<label id="deadline">{{deadline}}</label>
+<p> </p>
+<label>Date :</label>
+<label id="curdate">{{curdate}}</label>
+<script>
+let d = document.getElementById('deadline').textContent
+let c = document.getElementById('curdate').textContent
+if(d<c)
+{
+alert("The deadline for the poll has crossed");
+let url = window.location.href;
+let b = url.split("/")
+let c = b.length
+let d = ""
+for(i=0;i<c-3;i++){
+d=d+b[i] + "/"
+}
+window.location.replace(d);
+}
+
+</script>
+<p> ---------------- </p>
+
 {% for column_name1 in row1%}
       <tr>
         <td> {{column_name1}} </td> 
@@ -26,8 +52,12 @@ List of Options
       function Function1() {
   alert("Your vote has successfully been registered");
 }
+
       </script>
+
 </form> 
+</body>
+</html>
       
 
 

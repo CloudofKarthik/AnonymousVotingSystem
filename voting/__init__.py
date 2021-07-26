@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask import Blueprint
 from flask import request, redirect, url_for
 import datetime
+from datetime import date
 
 def create_app():
   app = Flask("voting")
@@ -128,16 +129,21 @@ def create_app():
     conn = db.get_db()
     cursor = conn.cursor()
     if request.method == "GET":
-      cursor.execute("select poll_name from polls where id = %s", (pid,))
+      cursor.execute("select poll_name, deadline from polls where id = %s", (pid,))
       row = cursor.fetchone()
       pollname=row[0]
+      deadline=row[1]
+      curdate = date.today()
       pollname1 = pollname
-      pollname = pollname.replace(" ","_")
+      pollname = pollname.replace(' ','_')
       pollname = pollname+str(pid)
-      pollname = "table_"+pollname      
-      cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname,))
+      pollname = 'table_'+pollname  
+      pollname2 = pollname.lower()
+     
+      cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname2,))
       rows = cursor.fetchall()
       row_list = []
+   
       for r in rows:
         row_list.append(r[0])
       row_list = row_list[1:len(row_list)]
@@ -145,11 +151,31 @@ def create_app():
       for i in range(l):
         row_list[i] = row_list[i][2:len(row_list[i])]
       cursor.execute("select * from {table_name}".format(table_name=pollname))
+   
       row1 = cursor.fetchone()
       row1 = list(row1[1:len(row1)])
+
       dict1 = dict(zip(row_list, row1))
+      max = 0
+      list1 = []
+      for k in range(len(row1)):
+        if row1[k] >= max:
+          max = row1[k]
+
+      for k in range(len(row1)):
+        if row1[k] == max:
+          list1.append(k)
+
+      winners = ""
+      winners = winners + row_list[list1[0]]
+      for i in range(1, len(list1)):
+        winners = winners +", "+str(row_list[list1[i]])
         
-      return render_template('poll_details.html', ID=ID, pid=pid, rows=row_list, pollname=pollname1, row = row1, dictionary = dict1) 
+
+
+      
+     
+      return render_template('poll_details.html', ID=ID, pid=pid, rows=row_list,deadline=deadline,curdate=curdate, pollname=pollname1, row = row1, dictionary = dict1, winners = winners) 
       
     
   @app.route("/polls/edit_poll/<pid>", methods=['GET','POST'])
@@ -157,14 +183,17 @@ def create_app():
     conn = db.get_db()
     cursor = conn.cursor()
     if request.method == "GET":
-      cursor.execute("select poll_name from polls where id = %s", (pid,))
+      cursor.execute("select poll_name, deadline from polls where id = %s", (pid,))
       row = cursor.fetchone()
-      pollname=row[0]
+      pollname = row[0]
+      curdate = date.today()
+      deadline = row[1]
       pollname1 = pollname
       pollname = pollname.replace(" ","_")
       pollname = pollname+str(pid)
       pollname = "table_"+pollname      
-      cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname,))
+      pollname2 = pollname.lower()
+      cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname2,))
       rows = cursor.fetchall()
       row_list = []
       for r in rows:
@@ -176,10 +205,10 @@ def create_app():
       cursor.execute("select * from {table_name}".format(table_name=pollname))
       row1 = cursor.fetchone()
       row1 = list(row1[1:len(row1)])
-      return render_template('edit_poll.html', row1=row_list, pollname=pollname1, pid=pid)
+      return render_template('edit_poll.html', row1=row_list, pollname=pollname1, pid=pid, deadline=str(deadline), curdate=str(curdate))
       
     elif request.method == "POST":
-      print("Hi")
+     
       option = request.form.get("Options")
       option = "c_"+option
       query1 = "select poll_name from polls where id={pid}".format(pid=pid)
@@ -189,7 +218,7 @@ def create_app():
       table_name = table_name.replace(" ","_")
       table_name = "table_"+table_name+str(pid)
       query2 = "update {table_name} set {option}={option}+1".format(table_name=table_name, option=option)
-      print(query2)
+     
       cursor.execute(query2)
       conn.commit()
       return redirect('/')

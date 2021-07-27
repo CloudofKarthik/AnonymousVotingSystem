@@ -1,13 +1,10 @@
-
-<style>
-
 body {
   font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
   color: #404040;
   background: #0ca3d2;
 }
 
-.polls {
+.polling {
   position: relative;
   margin: 30px auto;
   padding: 20px 20px 20px;
@@ -18,7 +15,7 @@ body {
   box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.polls:before {
+.polling :before {
   content: '';
   position: absolute;
   top: -8px;
@@ -30,10 +27,10 @@ body {
   border-radius: 4px;
 }
 
-.polls h1 {
+.polling h1 {
   margin: -20px -20px 21px;
   line-height: 40px;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: bold;
   color: #555;
   text-align: center;
@@ -48,70 +45,6 @@ body {
   -webkit-box-shadow: 0 1px whitesmoke;
   box-shadow: 0 1px whitesmoke;
 }
-
-.polls label {
-font-size: 20px;
-font-weight: bold;
-}
-
-.polls p {
-  margin: 20px 0 0;
-}
-
-.polls p:first-child {
-  margin-top: 0;
-}
-
-.polls input[type=text], .login input[type=password] {
-  width: 278px;
-}
-
-.polls p.submit {
-  text-align: center;
-}
-
-.polls p.submit1 {
-  text-align: left;
-}
-
-</style>
-
-<div class="polls">
-  <h1>Polls</h1>
-  <label>Welcome - </label>
-<label id="session">{{session['name']}}</label>
-<script>
-let ses = document.getElementById('session').textContent
-if (ses=="")
-{
-alert("You will be logged out");
-let url = window.location.href;
-let b = url.split("/")
-let c = b.length
-let d = ""
-for(i=0;i<c-2;i++){
-d=d+b[i] + "/"
-}
-window.location.replace(d);
-}
-</script>
-
-<p></p>
-
-  <form method="post" action="">
-    <div>
-    <p class="submit"><input type="submit" name="commit_create" value="CREATE POLL"></p>
-    <p class="submit"><input type="submit" name="commit_view" value="VIEW POLLS"></p>
-    
-    <p class="submit1"><input type="submit" name="commit_logout" value="LOGOUT"></p>
-    
-    </div>
-    </form>
-    
-    
-</div>
-
-
 
 
 

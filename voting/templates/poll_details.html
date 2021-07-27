@@ -1,9 +1,100 @@
-<!DOCTYPE html>
-<html>
-<body>
+<style>
 
-<div class="poll details">
-</div>
+body {
+  font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+  color: #404040;
+  background: #0ca3d2;
+}
+
+.polldetails {
+  position: relative;
+  margin: 30px auto;
+  padding: 20px 20px 20px;
+  width: 400px;
+  background: white;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.polldetails:before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.polldetails h1 {
+  margin: -20px -20px 21px;
+  line-height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  text-shadow: 0 1px white;
+  background: #f3f3f3;
+  border-bottom: 1px solid #cfcfcf;
+  border-radius: 3px 3px 0 0;
+  background-image: -webkit-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -moz-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -o-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: linear-gradient(to bottom, whiteffd, #eef2f5);
+  -webkit-box-shadow: 0 1px whitesmoke;
+  box-shadow: 0 1px whitesmoke;
+}
+
+.polldetails label {
+font-size: 16px;
+font-weight: bold;
+}
+
+.polldetails p {
+  margin: 20px 0 0;
+  font-size: 20;
+}
+
+.polldetails p:first-child {
+  margin-top: 0;
+}
+
+.polldetails input[type=text], .login input[type=password] {
+  width: 278px;
+}
+
+.polldetails p.submit {
+  text-align: center;
+  width: 60;
+  height: 40;
+  font-size: 32px;
+  margin-left: 50%;
+            transform: translateX(-50%);
+
+            border: none;
+            outline: none;
+            
+            cursor: pointer;
+            
+            text-transform: uppercase;
+            color: white;
+            border-radius: 4px;
+            transition: .3s;
+}
+
+
+.polldetails form .submit:hover{
+            opacity: 0.7;
+        }
+
+
+</style>
+
+<div class="polldetails">
+
 
 <script>
 window.onunload = function(){};
@@ -28,13 +119,14 @@ window.location.replace(d);
 </script>
 {% endif %}
 
-<p>
-{{pollname}}
 
-</p>
-<p>
-List of Options
-</p>
+<h1>POLL DETAILS</h1>
+<label> Poll : </label>
+<label>{{pollname}}</label>
+<br>
+<br>
+<hr>
+
 <p>
 <label> Deadline : </label>
 <label id="deadline">{{deadline}}</label>
@@ -42,16 +134,22 @@ List of Options
 <p>
 <p>
 <label>Current lead : </label>
-</p>
+
 <label id="winners">{{winners}}</label>
-</p>
+
+<p></p>
+
 </p>
 <label>Date :</label>
 <label id="curdate">{{curdate}}</label>
 <p>
 </p>
-The winner is : 
+<label>The winner is : </label>
 <label id="winner"></label>
+
+<br>
+<br>
+<hr>
 <script>
 let de = document.getElementById('deadline').textContent;
 let cu = document.getElementById('curdate').textContent;
@@ -66,9 +164,10 @@ document.getElementById("winner").innerText = "Not Decided";
 }
 </script>
 </p>
-<p>
----------------
 
+<p>
+<label><u>List of Options</u> : <u>Votes</u></label>
+</p>
 </p>
 {% for column_name1,column_name2 in dictionary.items()%}
 <p>
@@ -78,19 +177,21 @@ document.getElementById("winner").innerText = "Not Decided";
 </p>
       {% endfor %}
 <p> 
---------------------
+<hr>
+</p>
+
+<p>
+
+<label id="dic"  class="diction">{{dictionary}}</label>
 
 </p>
+
 
 <p>
 Get link for the poll
 </p>
-<p>
---------------------
 
-</p>
-
-<p><input type="text" id="txt" readonly></p>
+<p><input type="text" style = 'font-size:19px;' id="txt" readonly></p>
 <script>
 let a = window.location.href;
 let b = a.split("/")
@@ -118,12 +219,47 @@ function myFunction() {
 </script>
 
 
-
-<button onclick="myFunction()">Copy text</button>
-
-
-
+<p>
+</p>
+<button onclick="myFunction()" style = "height: 30px;">Copy text</button>
 
 
-</body>
-</html>
+
+<div id="piechart"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+let dictionary = document.getElementById("dic").textContent;
+document.getElementById("dic").style.display = 'none';
+
+dictionary_new = dictionary.replace(/'/g, '"');
+let list1=[];
+list1.push(["Option","Votes"])
+const obj  = JSON.parse(dictionary_new);
+for (const [key, value] of Object.entries(obj)) 
+{
+list1.push([key, value]);
+}
+console.log(list1);
+
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+var data = google.visualization.arrayToDataTable(list1);
+// Optional; add a title and set the width and height of the chart
+var options = {'title':'Votes', 'width':400, 'height':400};
+// Display the chart inside the <div> element with id="piechart"
+var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+chart.draw(data, options);
+}
+</script>
+
+
+</div>
+
+
+
+
+
+

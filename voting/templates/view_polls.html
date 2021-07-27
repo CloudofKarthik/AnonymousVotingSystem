@@ -1,5 +1,101 @@
-<div class="create_polls">
-View Polls
+<style>
+
+body {
+  font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+  color: #404040;
+  background: #0ca3d2;
+}
+
+.viewpolls {
+  position: relative;
+  margin: 30px auto;
+  padding: 20px 20px 20px;
+  width: 400px;
+  background: white;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.viewpolls:before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.viewpolls h1 {
+  margin: -20px -20px 21px;
+  line-height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  text-shadow: 0 1px white;
+  background: #f3f3f3;
+  border-bottom: 1px solid #cfcfcf;
+  border-radius: 3px 3px 0 0;
+  background-image: -webkit-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -moz-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -o-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: linear-gradient(to bottom, whiteffd, #eef2f5);
+  -webkit-box-shadow: 0 1px whitesmoke;
+  box-shadow: 0 1px whitesmoke;
+}
+
+.viewpolls label {
+font-size: 20px;
+font-weight: bold;
+}
+
+.viewpolls p {
+  margin: 20px 0 0;
+  font-size: 20;
+}
+
+.viewpolls p:first-child {
+  margin-top: 0;
+}
+
+.viewpolls input[type=text], .login input[type=password] {
+  width: 278px;
+}
+
+.viewpolls p.submit {
+  text-align: center;
+  width: 60;
+  height: 40;
+  font-size: 32px;
+  margin-left: 50%;
+            transform: translateX(-50%);
+
+            border: none;
+            outline: none;
+            
+            cursor: pointer;
+            
+            text-transform: uppercase;
+            color: white;
+            border-radius: 4px;
+            transition: .3s;
+}
+
+
+.viewpolls form .submit:hover{
+            opacity: 0.7;
+        }
+
+
+</style>
+
+
+<div class="viewpolls">
+<h1>VIEW POLLS</h1>
 
 <script>
 window.onunload = function(){};
@@ -22,7 +118,7 @@ window.location.replace(d);
 
 </script>
 {% endif %}
-</div>
+
 {% for id, owner, poll_name, deadline in polls%}
 <p>
       <tr>
@@ -32,4 +128,4 @@ window.location.replace(d);
 </p>
       {% endfor %}
       
-      
+</div>

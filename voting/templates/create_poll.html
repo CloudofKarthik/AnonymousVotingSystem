@@ -1,5 +1,98 @@
-<html>
-<head>
+
+
+<style>
+
+body {
+  font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+  color: #404040;
+  background: #0ca3d2;
+}
+
+.createpolls {
+  position: relative;
+  margin: 30px auto;
+  padding: 20px 20px 20px;
+  width: 310px;
+  background: white;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.createpolls:before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.createpolls h1 {
+  margin: -20px -20px 21px;
+  line-height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  text-shadow: 0 1px white;
+  background: #f3f3f3;
+  border-bottom: 1px solid #cfcfcf;
+  border-radius: 3px 3px 0 0;
+  background-image: -webkit-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -moz-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -o-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: linear-gradient(to bottom, whiteffd, #eef2f5);
+  -webkit-box-shadow: 0 1px whitesmoke;
+  box-shadow: 0 1px whitesmoke;
+}
+
+.createpolls label {
+font-size: 20px;
+font-weight: bold;
+}
+
+.createpolls p {
+  margin: 20px 0 0;
+}
+
+.createpolls p:first-child {
+  margin-top: 0;
+}
+
+.createpolls input[type=text], .login input[type=password] {
+  width: 278px;
+}
+
+.createpolls p.submit {
+  text-align: center;
+  width: 60;
+  height: 40;
+  font-size: 32px;
+  margin-left: 50%;
+            transform: translateX(-50%);
+
+            border: none;
+            outline: none;
+            
+            cursor: pointer;
+            
+            text-transform: uppercase;
+            color: white;
+            border-radius: 4px;
+            transition: .3s;
+}
+
+
+.createpolls form .submit:hover{
+            opacity: 0.7;
+        }
+
+
+</style>
 
 <script>
 
@@ -25,7 +118,7 @@ window.location.replace(d);
 {% endif %}
 
 
-<div class="create_polls">
+<div class="createpolls">
 <h1>CREATE POLL</h1>
   <form method="post" action="">
     <p><input type="text" name="poll_name" value="" placeholder="Poll_Name" required></p>
@@ -37,5 +130,4 @@ window.location.replace(d);
     <p class="submit"><input type="submit" id="btn1" name="commit" value="Submit"></p>
   </form>
 </div>
-</head>
-</html>
+

@@ -3,6 +3,7 @@ from flask import Blueprint, session
 from flask import request, redirect, url_for
 import datetime
 from datetime import date
+import re
 
 def create_app():
   app = Flask("voting")
@@ -99,11 +100,16 @@ def create_app():
       for j in range(l):
         option_list[j] = option_list[j].replace(" ","_")
         option_list[j] = "c_"+option_list[j]
+        
       
       table_name=str(poll_name+str(rows[0]))
-      table_name = table_name.replace(" ","_")
       table_name = table_name.strip()
+      table_name = table_name.replace(" ","_")
+      table_name = table_name.translate({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+      
       table_name = "table_"+table_name
+      
+      
       pid = rows[0]
       cursor.execute("""CREATE TABLE {table_name}(pid int, constraint fk_options foreign key(pid) REFERENCES polls(id))""".format(table_name = table_name))
       conn.commit()
@@ -143,8 +149,10 @@ def create_app():
       curdate = date.today()
       pollname1 = pollname
       pollname = pollname.replace(' ','_')
+      pollname = pollname.translate({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
       pollname = pollname+str(pid)
-      pollname = 'table_'+pollname  
+      pollname = 'table_'+pollname
+        
       pollname2 = pollname.lower()
      
       cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname2,))
@@ -198,7 +206,8 @@ def create_app():
       pollname1 = pollname
       pollname = pollname.replace(" ","_")
       pollname = pollname+str(pid)
-      pollname = "table_"+pollname      
+      pollname = "table_"+pollname
+      pollname = pollname.translate({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})     
       pollname2 = pollname.lower()
       cursor.execute("select column_name from information_schema.columns where table_name = %s",(pollname2,))
       rows = cursor.fetchall()
@@ -224,6 +233,7 @@ def create_app():
       table_name = row[0]
       table_name = table_name.replace(" ","_")
       table_name = "table_"+table_name+str(pid)
+      table_name = table_name.translate({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
       query2 = "update {table_name} set {option}={option}+1".format(table_name=table_name, option=option)
      
       cursor.execute(query2)

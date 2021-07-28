@@ -57,6 +57,7 @@ font-weight: bold;
 
 .createpolls p {
   margin: 20px 0 0;
+  font-size : 14;
 }
 
 .createpolls p:first-child {
@@ -85,6 +86,7 @@ font-weight: bold;
             border-radius: 4px;
             transition: .3s;
 }
+
 
 
 .createpolls form .submit:hover{
@@ -121,12 +123,12 @@ window.location.replace(d);
 <div class="createpolls">
 <h1>CREATE POLL</h1>
   <form method="post" action="">
-    <p><input type="text" name="poll_name" value="" placeholder="Poll_Name" required></p>
-    <p><input type="number" name="no_of_options" value="" placeholder="No_Of_Options" min="2" max="10" required></p>
+    <p><input class="pname" style="font-size: 17px" type="text" name="poll_name" value="" placeholder="Poll Name" required></p>
+    <p><input class="noo" style="font-size: 17px" type="number" name="no_of_options" value="" placeholder="No Of Options" min="2" max="10" required></p>
     <p>Enter the options for the poll in separate lines</p>
-    <p><textarea name="options" id="txta" required></textarea></p>
+    <p><textarea class="op" style="font-size: 17px" name="options" id="txta" rows="10" cols="27" required></textarea></p>
     <p>Select the deadline for the poll</p>
-    <p><input type="date" name="deadline" required></p>
+    <p><input class="pdate" style="font-size: 15px" type="date" name="deadline" required></p>
     <p class="submit"><input type="submit" id="btn1" name="commit" value="Submit"></p>
   </form>
 </div>

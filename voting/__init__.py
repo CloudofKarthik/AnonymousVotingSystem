@@ -30,7 +30,7 @@ def create_app():
       cursor.execute(query1)
       rows = cursor.fetchone()
       if not rows:
-        return render_template('index.html')
+        return render_template('index.html', message="Username or password is incorrect")
       else:
         session['name'] = rows[1]
         session['email'] = rows[2]
@@ -48,11 +48,17 @@ def create_app():
       username = request.form.get("Username")
       email = request.form.get("email")
       password = request.form.get("password")
-      cursor.execute("""INSERT INTO
-        users (name, email, password) 
-        VALUES (%s, %s, %s)""",(username, email, password))
-      conn.commit()
-      return redirect('/')
+      cursor.execute("select name from users where name = '{n}' or email ='{e}'".format(n = username,e = email))
+      rows = cursor.fetchone()
+      if rows:
+        message = "Username or email already exists"
+        return render_template('reg.html',message = message)
+      else:  
+        cursor.execute("""INSERT INTO
+          users (name, email, password) 
+          VALUES (%s, %s, %s)""",(username, email, password))
+        conn.commit()
+        return redirect('/')
       
   @app.route("/polls/<ID>", methods=['GET','POST'])
   def polls(ID):

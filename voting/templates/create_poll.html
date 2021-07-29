@@ -122,9 +122,11 @@ window.location.replace(d);
 
 <div class="createpolls">
 <h1>CREATE POLL</h1>
+  
   <form method="post" action="">
     <p><input class="pname" style="font-size: 17px" type="text" name="poll_name" value="" placeholder="Poll Name" required></p>
     <p><input class="noo" style="font-size: 17px" type="number" name="no_of_options" value="" placeholder="No Of Options" min="2" max="10" required></p>
+    <p style="color:red"> {{message}}</p>
     <p>Enter the options for the poll in separate lines</p>
     <p><textarea class="op" style="font-size: 17px" name="options" id="txta" rows="10" cols="27" required></textarea></p>
     <p>Select the deadline for the poll</p>

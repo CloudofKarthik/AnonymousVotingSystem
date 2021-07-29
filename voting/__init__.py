@@ -92,44 +92,55 @@ def create_app():
       poll_name = request.form.get("poll_name").strip()
       no_of_polls = request.form.get("no_of_options")
       deadline = request.form.get("deadline")
-      cursor.execute("""INSERT INTO
-        polls (owner, poll_name, no_of_options, deadline) 
-        VALUES ({ID}, '{pn}', {nop}, '{deadline}')""".format(ID=ID, pn=poll_name, nop=no_of_polls, deadline=deadline))
-      conn.commit()
-      query1 = "Select max(id) from polls where owner = '{ID}'".format(ID = ID)
-      cursor.execute(query1)
-      rows = cursor.fetchone()
       options = request.form.get("options")
       options = options.strip()
       option_list = list(options.split("\n"))
+      print(option_list)
       l = len(option_list)
       for j in range(l):
         option_list[j] = option_list[j].replace(" ","_")
         option_list[j] = "c_"+option_list[j]
+        option_list[j] = option_list[j].translate({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+      
+      print(option_list)
+      
+      if len(option_list)!=len(set(option_list)):
+        return render_template('create_poll.html', message="Two or more options are same")
         
-      
-      table_name=str(poll_name+str(rows[0]))
-      table_name = table_name.strip()
-      table_name = table_name.replace(" ","_")
-      table_name = table_name.translate({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
-      
-      table_name = "table_"+table_name
-      
-      
-      pid = rows[0]
-      cursor.execute("""CREATE TABLE {table_name}(pid int, constraint fk_options foreign key(pid) REFERENCES polls(id))""".format(table_name = table_name))
-      conn.commit()
-      query3 = "insert into {table_name}(pid) values({pid})".format(table_name=table_name, pid = pid)
-      cursor.execute(query3)
-      conn.commit()
-      for i in range(l):
-        query2 = """Alter table {table_name} add column {column} integer""".format(table_name=table_name, column=option_list[i])
-        cursor.execute(query2)
+      elif "c_\r" in option_list:
+        return render_template('create_poll.html', message="Invalid Option")
+      else:
+        
+        cursor.execute("""INSERT INTO
+        polls (owner, poll_name, no_of_options, deadline) 
+        VALUES ({ID}, '{pn}', {nop}, '{deadline}')""".format(ID=ID, pn=poll_name, nop=no_of_polls, deadline=deadline))
         conn.commit()
-        query4 = "update {table_name} set {option}=0".format(table_name=table_name, option=option_list[i])
-        cursor.execute(query4)
+        query1 = "Select max(id) from polls where owner = '{ID}'".format(ID = ID)
+        cursor.execute(query1)
+        rows = cursor.fetchone()
+      
+        table_name=str(poll_name+str(rows[0]))
+        table_name = table_name.strip()
+        table_name = table_name.replace(" ","_")
+        table_name = table_name.translate({ord(c): "_" for c in "!@#$%^&*()[]{};:,./<>?\|`~-=+"})
+        
+        table_name = "table_"+table_name
+        
+        
+        pid = rows[0]
+        cursor.execute("""CREATE TABLE {table_name}(pid int, constraint fk_options foreign key(pid) REFERENCES polls(id))""".format(table_name = table_name))
         conn.commit()
-      return redirect(url_for("polls", ID=ID), 302)
+        query3 = "insert into {table_name}(pid) values({pid})".format(table_name=table_name, pid = pid)
+        cursor.execute(query3)
+        conn.commit()
+        for i in range(l):
+          query2 = """Alter table {table_name} add column {column} integer""".format(table_name=table_name, column=option_list[i])
+          cursor.execute(query2)
+          conn.commit()
+          query4 = "update {table_name} set {option}=0".format(table_name=table_name, option=option_list[i])
+          cursor.execute(query4)
+          conn.commit()
+        return redirect(url_for("polls", ID=ID), 302)
       
   @app.route("/polls/<ID>/view_polls", methods=['GET','POST'])
   def view_polls(ID):

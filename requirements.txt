@@ -11,8 +11,6 @@ python-dateutil==2.7.3
 requests==2.22.0
 requests-unixsocket==0.2.0
 systemd-python==234
-ubuntu-advantage-tools==20.3
-ubuntu-drivers-common==0.0.0
 virtualenv==20.0.17
 Werkzeug==0.16.1
 zipp==1.0.0

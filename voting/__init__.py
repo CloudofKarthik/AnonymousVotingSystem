@@ -9,7 +9,7 @@ def create_app():
   app = Flask("voting")
   app.secret_key = "super secret key"
   
-  app.config.from_mapping(DATABASE="DATABASE_URL")
+  app.config.from_mapping(DATABASE=os.environment.get("DATABASE_URL"))
   
   from . import db 
   db.init_app(app)
